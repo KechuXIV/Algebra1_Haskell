@@ -1,7 +1,7 @@
 import Data.Char
 
-f :: Float -> Float
-f x | x > 0 = sqrt(x)
+funcion :: Float -> Float
+funcion x | x > 0 = sqrt(x)
     | x == 0 = 1
     
 pendiente :: (Float, Float) -> (Float, Float) -> Float
@@ -21,3 +21,19 @@ raices a b c = ( cuadratica a b c 1 , cuadratica a b c (-1))
 
 cuadratica :: Float -> Float -> Float -> Float -> Float
 cuadratica a b c signo = (-b + (sqrt((cuadrado b)-(4*a*c))*signo) )/2*a
+
+ite :: Bool -> a -> a -> a
+ite True t e = t
+ite False t e = e
+
+f :: Bool -> a -> a
+f x y = ite x x y
+
+g :: Bool -> a -> a
+g x y = if x then y else y
+
+h :: Bool -> Bool -> Bool
+h x y = (if x then y else y) && True
+
+i :: a -> a -> Bool
+i x y = h True 2
