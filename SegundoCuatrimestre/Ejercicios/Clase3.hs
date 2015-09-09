@@ -22,11 +22,3 @@ esMultiploDe8 n | n == 0 = True
                 | n == 6 = False
                 | n == 7 = False
                 | otherwise = esMultiploDe8 (n - 8)
-
-sumaImparesCuyoCuadSeaMenorQue :: Integer -> Integer
-sumaImparesCuyoCuadSeaMenorQue n    | n <= 1 = 0
-                                    | n == 2 = 1
-                                    | n > ((sumaImparesCuyoCuadSeaMenorQue (n-1) + 2)^2) = (sqrt(sumaImparesCuyoCuadSeaMenorQue (n-1)) + 1)^2
-                                    | otherwise = sumaImparesCuyoCuadSeaMenorQue (n-1)
-                                    
-
