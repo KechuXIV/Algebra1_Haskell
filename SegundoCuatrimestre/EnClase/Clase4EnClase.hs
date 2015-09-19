@@ -6,9 +6,14 @@ sumaAuxiliar umbral x
     | x ^ 2 > umbral = 0
     | otherwise = x + sumaAuxiliar umbral (x + 2)
 
-division :: Integer -> Integer -> (Integer, Integer)
-division a d = (func, a - (func)*d)
+divisionMia :: Integer -> Integer -> (Integer, Integer)
+divisionMia a d = (func, a - (func)*d)
     where func = cantidadDeVecesQueAXLePuedoRestarY a d
+    
+division :: Integer -> Integer -> (Integer, Integer)
+division a d    | a < d     = (0, a)
+                | otherwise = (fst qr' + 1, snd qr')
+                                where qr' = division (a-d) d
 
 cantidadDeVecesQueAXLePuedoRestarY :: Integer -> Integer -> Integer
 cantidadDeVecesQueAXLePuedoRestarY x y
