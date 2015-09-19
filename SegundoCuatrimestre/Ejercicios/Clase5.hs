@@ -1,11 +1,3 @@
-suma :: [Integer] -> Integer
-suma lista  | length lista == 0 = 0
-            | otherwise = head lista + suma (tail lista)
-
-reverso :: [a] -> [a]
-reverso []      = []
-reverso lista   = (reverso (tail lista)) ++ [head lista]
-
 reversoInt :: [Integer] -> [Integer]
 reversoInt []   = []
 reversoInt lista   = (reversoInt (tail lista)) ++ [head lista]
@@ -30,7 +22,7 @@ deBase base a   | length a == 1 = head a
                 | otherwise     = (head a* base^(length a -1)) + (deBase base (tail a))
 
 masElReverso :: [Integer] -> Integer
-masElReverso lista = (listaANumero lista) + (listaANumero reverso(lista))
+masElReverso lista = (listaANumero lista) + (listaANumero (reversoInt(lista)))
 
 capicuaPara :: [Integer] -> [Integer]
 capicuaPara lista   | esCapicua lista = lista
