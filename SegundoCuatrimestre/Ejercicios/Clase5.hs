@@ -54,3 +54,26 @@ quitarRepetidosDejandoElPrimero :: [Integer] -> [Integer]
 quitarRepetidosDejandoElPrimero lista   | lista == []                               = []
                                         | pertenece (head lista) (tail lista)       = quitarRepetidosDejandoElPrimero([(head lista)] ++ (quitar (head lista) (tail lista)))
                                         | otherwise                                 = [(head lista)] ++ quitarRepetidosDejandoElPrimero(tail lista)
+
+unionCreciente :: [Integer] -> [Integer] -> [Integer]
+unionCreciente xs ys    | xs == [] && ys == []                                          = [] 
+                        | xs == [] && ys /= []                                          = [(head ys)] ++ unionCreciente xs (tail ys)
+                        | xs /= [] && ys == []                                          = [(head xs)] ++ unionCreciente (tail xs) ys
+                        | (length xs) == 1 && (length ys) > 1 && (head xs) > (head ys)  = [(head ys)] ++ unionCreciente xs (tail ys)
+                        | (head xs) >= (head ys)                                        = [(head ys), (head xs)] ++ unionCreciente (tail xs) (tail ys)
+                        | (head xs) < (head ys)                                         = [(head xs), (head ys)] ++ unionCreciente (tail xs) (tail ys)
+
+estaOrdenado :: [Integer] -> Bool
+estaOrdenado xs = esNoDecreciente xs
+
+ordernarListaMenorAMayor :: [Integer] -> [Integer]
+ordernarListaMenorAMayor xs | xs == []                      = []
+                            | estaOrdenado xs               = xs
+                            | (length xs) == 1              = xs
+                            | otherwise                     = ordernarListaMenorAMayor(ordenarProx xs)
+
+ordenarProx :: [Integer] -> [Integer]
+ordenarProx xs  | xs == []                  = []
+                | (length xs) == 1          = xs
+                | head xs >= head(tail xs)  = [head(tail xs), head xs] ++ ordenarProx(tail(tail xs))
+                | otherwise                 = [head xs] ++ ordenarProx(tail xs)
