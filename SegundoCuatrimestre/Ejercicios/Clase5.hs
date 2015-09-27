@@ -76,4 +76,4 @@ ordenarProx :: [Integer] -> [Integer]
 ordenarProx xs  | xs == []                  = []
                 | (length xs) == 1          = xs
                 | head xs >= head(tail xs)  = [head(tail xs), head xs] ++ ordenarProx(tail(tail xs))
-                | otherwise                 = [head xs] ++ ordenarProx(tail xs) 
+                | otherwise                 = [head xs] ++ ordenarProx(tail xs)
