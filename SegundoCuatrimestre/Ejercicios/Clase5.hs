@@ -1,11 +1,11 @@
 reversoInt :: [Integer] -> [Integer]
-reversoInt []   = []
-reversoInt lista   = (reversoInt (tail lista)) ++ [head lista]
+reversoInt []       = []
+reversoInt lista    = (reversoInt (tail lista)) ++ [head lista]
                 
 esCapicua :: [Integer] -> Bool
 esCapicua lista | length lista == 0 = True
                 | length lista == 1 = True
-                | otherwise = lista == reversoInt(lista)
+                | otherwise         = lista == reversoInt(lista)
                 
 enBase :: Integer -> Integer -> [Integer]
 enBase a base | base > a    = [a]
@@ -25,15 +25,15 @@ masElReverso :: [Integer] -> Integer
 masElReverso lista = (listaANumero lista) + (listaANumero (reversoInt(lista)))
 
 capicuaPara :: [Integer] -> [Integer]
-capicuaPara lista   | esCapicua lista = lista
-                    | otherwise = capicuaPara(numeroALista(masElReverso lista))
+capicuaPara lista   | esCapicua lista   = lista
+                    | otherwise         = capicuaPara(numeroALista(masElReverso lista))
                     
 cambiarDeBase :: Integer -> Integer -> [Integer] -> [Integer]
 cambiarDeBase b1 b2 a = enBase (deBase b1 a) b2
 
 esNoDecreciente :: [Integer] -> Bool
 esNoDecreciente lista   | length lista == 1 = True
-                        | otherwise = (head(lista) <= head(tail(lista))) && esNoDecreciente(tail lista)
+                        | otherwise         = (head(lista) <= head(tail(lista))) && esNoDecreciente(tail lista)
                      
 quitar :: Integer -> [Integer] -> [Integer]
 quitar x lista  | lista == []           = []
