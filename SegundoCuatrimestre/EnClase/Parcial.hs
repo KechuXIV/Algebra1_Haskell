@@ -33,8 +33,23 @@ quitar x xs | xs == [] = []
             | (head xs) == x = quitar x (tail xs)
             | otherwise = [head xs] ++ quitar x (tail xs)
             
-empaquetar :: [Char] -> [[Char]]
+empaquetar :: [Char] -> [[Char]] --Esta mal solo debe empaquetar los consecutivos
 empaquetar xs   | xs == [] = []
                 | pertenece (head xs) (tail xs) = [nvecesx (cant (head xs) xs) (head xs)] ++ empaquetar (quitar(head xs) (tail xs))
                 | otherwise = [[head xs]] ++ empaquetar(tail xs)
+                
+                
+cant2 :: Char -> [Char] -> Integer
+cant2 x xs   | xs == [] = 0
+            | (head xs) == x = 1 + cant2 x (tail xs)
+            | otherwise = 0
             
+quitar2 :: Char -> [Char] -> [Char]
+quitar2 x xs | xs == [] = []
+            | (head xs) == x = quitar2 x (tail xs)
+            | otherwise = xs
+            
+empaquetar2 :: [Char] -> [[Char]]
+empaquetar2 xs   | xs == [] = []
+                | pertenece (head xs) (tail xs) = [nvecesx (cant2 (head xs) xs) (head xs)] ++ empaquetar2 (quitar2(head xs) (tail xs))
+                | otherwise = [[head xs]] ++ empaquetar2(tail xs)
