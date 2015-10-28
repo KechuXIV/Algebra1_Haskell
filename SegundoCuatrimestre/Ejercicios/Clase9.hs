@@ -9,8 +9,9 @@ esHeap (Ramif (Ramif ar1 a ar2) b (Hoja c))           = (a > b) && (c > b) && es
 esHeap (Ramif (Ramif ar1 a ar2) b (Ramif ar3 c ar4))  = (a > b) && (c > b) && esHeap (Ramif ar1 a ar2) && esHeap (Ramif ar3 c ar4)
 
 data Lista a = Vacia | Agregar a (Lista a)
-instance Show (Lista a) where
-    show (xs)       = mostrarLista xs
+instance Show a => Show (Lista a) where
+    show xs = mostrarLista xs
+
 
 vacia :: Lista a -> Bool
 vacia Vacia = True
