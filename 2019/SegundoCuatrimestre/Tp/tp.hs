@@ -93,7 +93,7 @@ type Set a =[a]
 
 permutacionesGrupo :: Integer -> Set [Integer]
 permutacionesGrupo 1 = [[1]]
-permutacionesGrupo n = insertarEnCadaLista2 (permutaciones (n-1)) n
+permutacionesGrupo n = insertarEnCadaLista2 (permutacionesGrupo (n-1)) n
 
 agregar :: Eq a => a -> Set a -> Set a
 agregar x xs | elem x xs = xs
@@ -124,3 +124,33 @@ union xs ys | xs == [] = ys
             | ys == [] = xs
             | elem (head xs) ys = union (tail xs) ys
             | otherwise = head xs:(union (tail xs) ys)
+
+
+
+--Ejercicio 3----------------------------------------------------------------
+
+
+-- Calcular los factores 
+--factores :: Integer -> [Integer]
+--factores n = [x | x <- [1..n], n `mod` x == 0]
+
+-- Será primo solo si sus factores son 1 y él mismo
+--esPrimo :: Integer -> Bool
+--esPrimo n = factores n == [1,n]
+
+noTieneDivisoresHasta :: Integer -> Integer -> Bool
+noTieneDivisoresHasta m n   | m < 2                         = True
+                            | (mod n m == 0) && (m /= n)    = False
+                            | otherwise                     = noTieneDivisoresHasta (m-1) n
+                            
+esPrimo :: Integer -> Bool
+esPrimo n = noTieneDivisoresHasta n n
+
+esCirculoPrimo :: Circulo -> Bool
+esCirculoPrimo [x1,x2] = esPrimo (x1+x2)
+esCirculoPrimo (x1:x2:xs) = esPrimo (x1+x2) && esCirculoPrimoAux ((x2:xs) ++ [x1]) x1
+
+esCirculoPrimoAux :: Circulo -> Integer -> Bool
+esCirculoPrimoAux [x1,x2] _ = esPrimo (x1+x2)
+esCirculoPrimoAux (x1:x2:xs) n | x2 == n = esPrimo (x1+n)
+                               | otherwise = esPrimo (x1+x2) && (esCirculoPrimoAux (x2:xs) n)
