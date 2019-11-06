@@ -14,8 +14,9 @@ ubicacion n (x:xs)  | n == x    = 0
                     | otherwise = 1 + ubicacion n xs
 
 sonCirculosIguales :: Circulo -> Circulo -> Bool
-sonCirculosIguales [] _ = True 
-sonCirculosIguales _ [] = True 
+sonCirculosIguales [] [] = True 
+sonCirculosIguales _ [] = False 
+sonCirculosIguales [] _ = False 
 sonCirculosIguales a (x:xs) = rotar (ubicacion x (a)) a == (x:xs)
 
 ------------------------------------------------------------------------
@@ -154,3 +155,13 @@ esCirculoPrimoAux :: Circulo -> Integer -> Bool
 esCirculoPrimoAux [x1,x2] _ = esPrimo (x1+x2)
 esCirculoPrimoAux (x1:x2:xs) n | x2 == n = esPrimo (x1+n)
                                | otherwise = esPrimo (x1+x2) && (esCirculoPrimoAux (x2:xs) n)
+
+--Ejericio 4-------------------------------------------------------------------------------
+
+estaRepetidoPrimero :: [Circulo] -> Bool
+estaRepetidoPrimero [] = False
+estaRepetidoPrimero [x1] = False
+estaRepetidoPrimero [x1,x2] = x1 == x2
+estaRepetidoPrimero (x1:x2:xs) = sonCirculosIguales x1 x2 || estaRepetidoPrimero (x1:xs)
+
+
