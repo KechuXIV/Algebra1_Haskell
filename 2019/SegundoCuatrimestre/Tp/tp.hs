@@ -2,155 +2,91 @@ type Circulo = [Integer]
 
 --Ejercicio 1-------------------------------------------------------------
 
-rotar :: Integer -> Circulo -> Circulo
-rotar n [] = []
-rotar n [a] = [a]
-rotar 0 c = c
-rotar n (x:xs) = (rotar (n-1) (xs ++ [x]))
-
-ubicacion :: Integer -> Circulo -> Integer
-ubicacion n [a] = 0
-ubicacion n (x:xs)  | n == x    = 0
-                    | otherwise = 1 + ubicacion n xs
-
 sonCirculosIguales :: Circulo -> Circulo -> Bool
 sonCirculosIguales [] [] = True 
 sonCirculosIguales _ [] = False 
 sonCirculosIguales [] _ = False 
 sonCirculosIguales a (x:xs) = rotar (ubicacion x (a)) a == (x:xs)
 
-------------------------------------------------------------------------
 
+-- Rota un circulo en n posiciones
+rotar :: Integer -> Circulo -> Circulo
+rotar n [] = []
+rotar n [a] = [a]
+rotar 0 c = c
+rotar n (x:xs) = (rotar (n-1) (xs ++ [x]))
 
+-- Informa la ubicación de cierto entero en un circulo
+ubicacion :: Integer -> Circulo -> Integer
+ubicacion n [a] = 0
+ubicacion n (x:xs)  | n == x    = 0
+                    | otherwise = 1 + ubicacion n xs
 
 --Ejercicio 2-------------------------------------------------------------
 
-factorial :: Integer -> Integer
-factorial 0 = 1
-factorial 1 = 1
-factorial n = n*factorial(n-1)
-
 permutaciones :: Integer -> [[Integer]]
 permutaciones 1 = [[1]]
-permutaciones n = multiplicar (cosa (n)) (factorial n)
--- permutaciones n = permutarCadaLista (multiplicar (cosa (n)) (factorial n)) n  
+permutaciones n = insertarEnCadaLista (permutaciones (n-1)) n
 
-multiplicar :: [[Integer]] -> Integer -> [[Integer]]
-multiplicar [] _ = []
-multiplicar xs 1 = xs
-multiplicar (x:xs) n = (x:xs) ++ multiplicar (x:xs) (n-1) 
+--Insertar un entero en una posición especifica de la lista
+insertarEn :: [Integer] -> Integer -> Integer -> [Integer] 
+insertarEn (xs) a 1 = a:xs
+insertarEn (x:xs) a n = x : (insertarEn xs a (n-1))
 
-permutarCadaLista2 :: [[Integer]] -> Integer -> [[Integer]]
-permutarCadaLista2 [] _ = []
-permutarCadaLista2 (x:[]) 1 = (rotar 1 x) : [] 
-permutarCadaLista2 (x:xs) n = (([(head x)] ++ (rotar n (tail x))) : []) ++ (permutarCadaLista2 xs (n-1)) 
-
-permutarCadaLista :: [[Integer]] -> Integer -> [[Integer]]
-permutarCadaLista [] _ = []
-permutarCadaLista (x:[]) 1 = rotar 1 x  : []
-permutarCadaLista (x:xs) n = rotar n x  : permutarCadaLista xs (n-1) 
-
--- intercala :: Integer -> [[Integer]] -> [[Integer]]
--- intercala n [] = []
--- intercala n (x:[]) = (x++[n]) : []
--- intercala n (x1:x2:[]) = (x1 ++ n x2) : []
--- intercala n (x:xs) = (n:x) : (intercala n xs)
-
--- intercalar n [] = [n]
--- intercalar n (x:[]) = (x ++ [n]) : ([n] ++ x) : []
--- intercalar n (x:xs) = 
-
-permutar :: [Integer] -> [[Integer]]
-permutar [] = []
-permutar (x:[]) = [x] : []
-permutar (x1:x2:[]) = (x1:x2:[]) : (x2:x1:[]) : []
-permutar (x:xs) = insertarEnCadaLista (permutar xs) x
-
-intercalarEnCadaLista :: [[Integer]] -> Integer -> [[Integer]]
-intercalarEnCadaLista [] _ = []
-intercalarEnCadaLista (x:[]) a = (a : x) : (x ++ [a]) : []
-
-intercalarEntreListas :: [Integer] -> [Integer] -> [Integer]
-intercalarEntreListas (x:xs) ys = x : intercalarEntreListas ys xs
-intercalarEntreListas [] ys = ys
-
-
-
-cosa :: Integer -> [[Integer]]
-cosa 1 = [[1]]
-cosa n = insertarEnCadaLista (cosa (n-1)) n
-
-insertarEnCadaLista :: [[Integer]] -> Integer -> [[Integer]]
-insertarEnCadaLista [] a = []
-insertarEnCadaLista (x:xs) a = (x ++ [a]) : insertarEnCadaLista xs a  
-
-
-
-
-------------------------------------------------------------------------
-
-
-type Set a =[a]
-
-permutacionesGrupo :: Integer -> Set [Integer]
-permutacionesGrupo 1 = [[1]]
-permutacionesGrupo n = insertarEnCadaLista2 (permutacionesGrupo (n-1)) n
-
-agregar :: Eq a => a -> Set a -> Set a
-agregar x xs | elem x xs = xs
-             |otherwise = x:xs
-
-insertarEn :: [Integer] -> Integer -> Integer -> [Integer]
-insertarEn (xs) a 1 = (a:xs)
-insertarEn (x:xs) a n = x:(insertarEn xs a (n-1))
-
-longitud :: [Integer] -> Integer
+--Longitud de una lista
+longitud :: [a] -> Integer
 longitud [] = 0
 longitud (_:xs) = 1 + longitud xs
 
-insertarEnTodasLasPosibles :: [Integer] -> Integer -> Set [Integer]
-insertarEnTodasLasPosibles [] n = [[n]]
-insertarEnTodasLasPosibles xs n = iteracionParaInsertarEn xs n ((longitud xs) + 1)
+agregar :: Eq a => a -> [a] -> [a]
+agregar a [] = a : []
+agregar a xs | contiene xs a = agregar a xs
+             | otherwise     = a : (agregar a xs)
 
-iteracionParaInsertarEn :: [Integer] -> Integer -> Integer -> Set [Integer]
-iteracionParaInsertarEn _ _ 0 = []
-iteracionParaInsertarEn xs n a = agregar (insertarEn xs n a) (iteracionParaInsertarEn xs n (a-1))
+--Genera una lista de listas, ingresando un elemento en todas las posiciones posibles
+insertarEnTodasLasPosicionesPosibles :: [Integer] -> Integer -> [[Integer]]
+insertarEnTodasLasPosicionesPosibles [] n = [[n]]
+insertarEnTodasLasPosicionesPosibles xs n = insertarEnTodasLasPosicionesPosiblesAux xs n ((longitud xs) + 1)
 
-insertarEnCadaLista2 :: Set [Integer] -> Integer -> Set [Integer]
-insertarEnCadaLista2 [] a = []
-insertarEnCadaLista2 (x:xs) a = union (insertarEnTodasLasPosibles x a) (insertarEnCadaLista2 xs a)
+--Devuelve una lista de listas con el nuevo elemento en todas las posiciones posibles
+insertarEnTodasLasPosicionesPosiblesAux :: [Integer] -> Integer -> Integer -> [[Integer]]
+insertarEnTodasLasPosicionesPosiblesAux _ _ 0 = []
+insertarEnTodasLasPosicionesPosiblesAux xs n a = agregar (insertarEn xs n a) (insertarEnTodasLasPosicionesPosiblesAux xs n (a-1))
 
-union :: Eq a => Set a -> Set a -> Set a --ejercicio de clase 9, clase antes del parcial, lo pude hacer con ayuda
-union xs ys | xs == [] = ys
-            | ys == [] = xs
-            | elem (head xs) ys = union (tail xs) ys
-            | otherwise = head xs:(union (tail xs) ys)
+--Insertar un elemento en cada lista de la lista
+insertarEnCadaLista :: [[Integer]] -> Integer -> [[Integer]]
+insertarEnCadaLista [] a = []
+insertarEnCadaLista (x:xs) a = union (insertarEnTodasLasPosicionesPosibles x a) (insertarEnCadaLista xs a)
 
+--Une 2 listas, descartando elementos iguales
+union :: Eq a => [a] -> [a] -> [a]
+union [] ys = ys
+union xs [] = xs
+union (x:xs) ys | contiene ys x = union xs ys
+                | otherwise     = x : (union xs ys)
 
+--Devuelve si una lista contiene a cierto elemento
+contiene :: Eq a => [a] -> a -> Bool
+contiene [] _ = False
+contiene (x:xs) a = a == x || contiene xs a
 
 --Ejercicio 3----------------------------------------------------------------
-
-
--- Calcular los factores 
---factores :: Integer -> [Integer]
---factores n = [x | x <- [1..n], n `mod` x == 0]
-
--- Será primo solo si sus factores son 1 y él mismo
---esPrimo :: Integer -> Bool
---esPrimo n = factores n == [1,n]
-
-noTieneDivisoresHasta :: Integer -> Integer -> Bool
-noTieneDivisoresHasta m n   | m < 2                         = True
-                            | (mod n m == 0) && (m /= n)    = False
-                            | otherwise                     = noTieneDivisoresHasta (m-1) n
-                            
-esPrimo :: Integer -> Bool
-esPrimo n = noTieneDivisoresHasta n n
 
 esCirculoPrimo :: Circulo -> Bool
 esCirculoPrimo [x1,x2] = esPrimo (x1+x2)
 esCirculoPrimo (x1:x2:xs) = esPrimo (x1+x2) && esCirculoPrimoAux ((x2:xs) ++ [x1]) x1
 
+-- Informa si tiene divisores menores que cierto n
+noTieneDivisoresHasta :: Integer -> Integer -> Bool
+noTieneDivisoresHasta m n   | m < 2                         = True
+                            | (mod n m == 0) && (m /= n)    = False
+                            | otherwise                     = noTieneDivisoresHasta (m-1) n
+
+-- Informa si un entero es primo
+esPrimo :: Integer -> Bool
+esPrimo n = noTieneDivisoresHasta n n
+
+-- Función auxiliar que se encarga de la recursión
 esCirculoPrimoAux :: Circulo -> Integer -> Bool
 esCirculoPrimoAux [x1,x2] _ = esPrimo (x1+x2)
 esCirculoPrimoAux (x1:x2:xs) n | x2 == n = esPrimo (x1+n)
@@ -164,4 +100,27 @@ estaRepetidoPrimero [x1] = False
 estaRepetidoPrimero [x1,x2] = x1 == x2
 estaRepetidoPrimero (x1:x2:xs) = sonCirculosIguales x1 x2 || estaRepetidoPrimero (x1:xs)
 
+--Ejericio 5-------------------------------------------------------------------------------
 
+listaCirculosPrimos :: Integer -> [Circulo]
+listaCirculosPrimos 2 = [[1,2]]
+listaCirculosPrimos n = eleminarRepetidos(eliminarLosNoPrimos (permutaciones n))
+
+-- Elimina los circulos que no son primos 
+eliminarLosNoPrimos :: [Circulo] -> [Circulo]
+eliminarLosNoPrimos [] = []
+eliminarLosNoPrimos (x:xs) | esCirculoPrimo x = x : eliminarLosNoPrimos xs
+                           | otherwise        = eliminarLosNoPrimos xs
+
+-- Elimina los circulos repetidos
+eleminarRepetidos :: [Circulo] -> [Circulo]
+eleminarRepetidos []     = []
+eleminarRepetidos (x:xs) | estaRepetidoPrimero (x:xs) = eleminarRepetidos xs
+                         | otherwise                  = x : (eleminarRepetidos xs)
+
+--Ejericio 6-------------------------------------------------------------------------------
+
+contarCirculosPrimos :: Integer -> Integer
+contarCirculosPrimos n = longitud (listaCirculosPrimos n)
+
+--Ejericio optativo------------------------------------------------------------------------
