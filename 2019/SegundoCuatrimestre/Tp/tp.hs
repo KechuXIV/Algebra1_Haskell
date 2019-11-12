@@ -124,3 +124,24 @@ contarCirculosPrimos :: Integer -> Integer
 contarCirculosPrimos n = longitud (listaCirculosPrimos n)
 
 --Ejericio optativo------------------------------------------------------------------------
+
+listaCirculosPrimosEspejados :: Integer -> [Circulo]
+listaCirculosPrimosEspejados n = eliminarNoEspejados(listaCirculosPrimos n) 
+
+-- Espeja una lista
+espejar :: [a] -> [a]
+espejar [] = []
+espejar [a] = [a]
+espejar (x:xs) = espejar (xs) ++ [x]
+
+-- Elimina los circulos no espejados
+eliminarNoEspejados :: [Circulo] -> [Circulo]
+eliminarNoEspejados []     = []
+eliminarNoEspejados (x:xs) | estaRepetidoPrimero ((espejar x):xs) = [x] ++ (obtenerCirculosIgualesA (espejar x) (xs)) ++ eliminarNoEspejados xs
+                           | otherwise                            = eliminarNoEspejados xs
+
+-- Obtienes los circulos en una lista iguales a cierto circulo
+obtenerCirculosIgualesA :: Circulo -> [Circulo] -> [Circulo]
+obtenerCirculosIgualesA c []     = []
+obtenerCirculosIgualesA c (x:xs) | sonCirculosIguales c x = x : (obtenerCirculosIgualesA c xs)
+                                 | otherwise              = obtenerCirculosIgualesA c xs 
