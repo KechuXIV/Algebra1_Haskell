@@ -27,20 +27,24 @@ ubicacion n (x:xs)  | n == x    = 0
 permutaciones :: Integer -> [[Integer]]
 permutaciones n = permutarLista (obtenerListaDe n)  (obtenerListaDe n)
 
+-- Permuta una lista
 permutarLista :: [Integer] -> [Integer] -> [[Integer]]
 permutarLista [] _ = []
 permutarLista (x:[]) (y:[]) = [[x]]
 permutarLista (x:xs) ys = agregarEnCadaListaPrimero x (permutarLista (sacarDeLaLista x ys) (sacarDeLaLista x ys)) ++ permutarLista xs ys
 
+-- Obtiene una lista de enteros de 1 a n
 obtenerListaDe :: Integer -> [Integer]
 obtenerListaDe 1 = [1]
 obtenerListaDe n = obtenerListaDe (n-1) ++ [n]  
 
+-- Saca de la lista un elemento
 sacarDeLaLista :: Integer -> [Integer] -> [Integer]
 sacarDeLaLista _ [] = []
 sacarDeLaLista n (x:xs) | x == n = sacarDeLaLista n xs
                         | otherwise = x : sacarDeLaLista n xs
 
+-- Agrega un entero en cada lista en la primera posiciòn
 agregarEnCadaListaPrimero :: Integer -> [[Integer]] -> [[Integer]]
 agregarEnCadaListaPrimero _ [] = []
 agregarEnCadaListaPrimero n (x:xs) = (n : x) : (agregarEnCadaListaPrimero n (xs))
@@ -106,7 +110,7 @@ longitud (_:xs) = 1 + longitud xs
 --Ejericio optativo------------------------------------------------------------------------
 
 listaCirculosPrimosEspejados :: Integer -> [Circulo]
-listaCirculosPrimosEspejados n = eliminarNoEspejados(listaCirculosPrimos n) 
+listaCirculosPrimosEspejados n = eliminarEspejados(listaCirculosPrimos n) 
 
 -- Espeja una lista
 espejar :: [a] -> [a]
@@ -115,10 +119,10 @@ espejar [a] = [a]
 espejar (x:xs) = espejar (xs) ++ [x]
 
 -- Elimina los circulos no espejados
-eliminarNoEspejados :: [Circulo] -> [Circulo]
-eliminarNoEspejados []     = []
-eliminarNoEspejados (x:xs) | estaRepetidoPrimero ((espejar x):xs) = [x] ++ (obtenerCirculosIgualesA (espejar x) (xs)) ++ eliminarNoEspejados xs
-                           | otherwise                            = eliminarNoEspejados xs
+eliminarEspejados :: [Circulo] -> [Circulo]
+eliminarEspejados []     = []
+eliminarEspejados (x:xs) | estaRepetidoPrimero ((espejar x):xs) = eliminarEspejados xs
+                         | otherwise                            = x : eliminarEspejados xs
 
 -- Obtienes los circulos en una lista iguales a cierto circulo
 obtenerCirculosIgualesA :: Circulo -> [Circulo] -> [Circulo]
