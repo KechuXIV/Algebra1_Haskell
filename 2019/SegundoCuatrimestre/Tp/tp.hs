@@ -38,11 +38,6 @@ longitud :: [a] -> Integer
 longitud [] = 0
 longitud (_:xs) = 1 + longitud xs
 
-agregar :: Eq a => a -> [a] -> [a]
-agregar a [] = a : []
-agregar a xs | contiene xs a = agregar a xs
-             | otherwise     = a : (agregar a xs)
-
 --Genera una lista de listas, ingresando un elemento en todas las posiciones posibles
 insertarEnTodasLasPosicionesPosibles :: [Integer] -> Integer -> [[Integer]]
 insertarEnTodasLasPosicionesPosibles [] n = [[n]]
@@ -51,7 +46,7 @@ insertarEnTodasLasPosicionesPosibles xs n = insertarEnTodasLasPosicionesPosibles
 --Devuelve una lista de listas con el nuevo elemento en todas las posiciones posibles
 insertarEnTodasLasPosicionesPosiblesAux :: [Integer] -> Integer -> Integer -> [[Integer]]
 insertarEnTodasLasPosicionesPosiblesAux _ _ 0 = []
-insertarEnTodasLasPosicionesPosiblesAux xs n a = agregar (insertarEn xs n a) (insertarEnTodasLasPosicionesPosiblesAux xs n (a-1))
+insertarEnTodasLasPosicionesPosiblesAux xs n a = (insertarEn xs n a) : (insertarEnTodasLasPosicionesPosiblesAux xs n (a-1))
 
 --Insertar un elemento en cada lista de la lista
 insertarEnCadaLista :: [[Integer]] -> Integer -> [[Integer]]

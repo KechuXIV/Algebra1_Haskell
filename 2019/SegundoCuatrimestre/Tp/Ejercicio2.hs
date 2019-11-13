@@ -39,3 +39,29 @@ union (x:xs) ys | contiene ys x = union xs ys
 contiene :: Eq a => [a] -> a -> Bool
 contiene [] _ = False
 contiene (x:xs) a = a == x || contiene xs a
+
+
+
+--OPTIMIZADO
+
+
+permutarLista :: [Integer] -> [Integer] -> [[Integer]]
+permutarLista [] _ = []
+permutarLista (x:[]) (y:[]) = [[x]]
+permutarLista (x:xs) ys = agregarEnCadaListaPrimero x (permutarLista (sacarDeLaLista x ys) (sacarDeLaLista x ys)) ++ permutarLista xs ys
+
+obtenerListaDe :: Integer -> [Integer]
+obtenerListaDe 1 = [1]
+obtenerListaDe n = obtenerListaDe (n-1) ++ [n]  
+
+permu :: Integer -> [[Integer]]
+permu n = permutarLista (obtenerListaDe n)  (obtenerListaDe n) 
+
+sacarDeLaLista :: Integer -> [Integer] -> [Integer]
+sacarDeLaLista _ [] = []
+sacarDeLaLista n (x:xs) | x == n = sacarDeLaLista n xs
+                        | otherwise = x : sacarDeLaLista n xs
+
+agregarEnCadaListaPrimero :: Integer -> [[Integer]] -> [[Integer]]
+agregarEnCadaListaPrimero _ [] = []
+agregarEnCadaListaPrimero n (x:xs) = (n : x) : (agregarEnCadaListaPrimero n (xs))
