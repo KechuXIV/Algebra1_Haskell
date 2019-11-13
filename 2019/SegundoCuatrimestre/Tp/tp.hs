@@ -25,45 +25,25 @@ ubicacion n (x:xs)  | n == x    = 0
 --Ejercicio 2-------------------------------------------------------------
 
 permutaciones :: Integer -> [[Integer]]
-permutaciones 1 = [[1]]
-permutaciones n = insertarEnCadaLista (permutaciones (n-1)) n
+permutaciones n = permutarLista (obtenerListaDe n)  (obtenerListaDe n)
 
---Insertar un entero en una posición especifica de la lista
-insertarEn :: [Integer] -> Integer -> Integer -> [Integer] 
-insertarEn (xs) a 1 = a:xs
-insertarEn (x:xs) a n = x : (insertarEn xs a (n-1))
+permutarLista :: [Integer] -> [Integer] -> [[Integer]]
+permutarLista [] _ = []
+permutarLista (x:[]) (y:[]) = [[x]]
+permutarLista (x:xs) ys = agregarEnCadaListaPrimero x (permutarLista (sacarDeLaLista x ys) (sacarDeLaLista x ys)) ++ permutarLista xs ys
 
---Longitud de una lista
-longitud :: [a] -> Integer
-longitud [] = 0
-longitud (_:xs) = 1 + longitud xs
+obtenerListaDe :: Integer -> [Integer]
+obtenerListaDe 1 = [1]
+obtenerListaDe n = obtenerListaDe (n-1) ++ [n]  
 
---Genera una lista de listas, ingresando un elemento en todas las posiciones posibles
-insertarEnTodasLasPosicionesPosibles :: [Integer] -> Integer -> [[Integer]]
-insertarEnTodasLasPosicionesPosibles [] n = [[n]]
-insertarEnTodasLasPosicionesPosibles xs n = insertarEnTodasLasPosicionesPosiblesAux xs n ((longitud xs) + 1)
+sacarDeLaLista :: Integer -> [Integer] -> [Integer]
+sacarDeLaLista _ [] = []
+sacarDeLaLista n (x:xs) | x == n = sacarDeLaLista n xs
+                        | otherwise = x : sacarDeLaLista n xs
 
---Devuelve una lista de listas con el nuevo elemento en todas las posiciones posibles
-insertarEnTodasLasPosicionesPosiblesAux :: [Integer] -> Integer -> Integer -> [[Integer]]
-insertarEnTodasLasPosicionesPosiblesAux _ _ 0 = []
-insertarEnTodasLasPosicionesPosiblesAux xs n a = (insertarEn xs n a) : (insertarEnTodasLasPosicionesPosiblesAux xs n (a-1))
-
---Insertar un elemento en cada lista de la lista
-insertarEnCadaLista :: [[Integer]] -> Integer -> [[Integer]]
-insertarEnCadaLista [] a = []
-insertarEnCadaLista (x:xs) a = union (insertarEnTodasLasPosicionesPosibles x a) (insertarEnCadaLista xs a)
-
---Une 2 listas, descartando elementos iguales
-union :: Eq a => [a] -> [a] -> [a]
-union [] ys = ys
-union xs [] = xs
-union (x:xs) ys | contiene ys x = union xs ys
-                | otherwise     = x : (union xs ys)
-
---Devuelve si una lista contiene a cierto elemento
-contiene :: Eq a => [a] -> a -> Bool
-contiene [] _ = False
-contiene (x:xs) a = a == x || contiene xs a
+agregarEnCadaListaPrimero :: Integer -> [[Integer]] -> [[Integer]]
+agregarEnCadaListaPrimero _ [] = []
+agregarEnCadaListaPrimero n (x:xs) = (n : x) : (agregarEnCadaListaPrimero n (xs))
 
 --Ejercicio 3----------------------------------------------------------------
 
@@ -92,7 +72,7 @@ esCirculoPrimoAux (x1:x2:xs) n | x2 == n = esPrimo (x1+n)
 estaRepetidoPrimero :: [Circulo] -> Bool
 estaRepetidoPrimero [] = False
 estaRepetidoPrimero [x1] = False
-estaRepetidoPrimero [x1,x2] = x1 == x2
+estaRepetidoPrimero [x1,x2] = sonCirculosIguales x1 x2
 estaRepetidoPrimero (x1:x2:xs) = sonCirculosIguales x1 x2 || estaRepetidoPrimero (x1:xs)
 
 --Ejericio 5-------------------------------------------------------------------------------
@@ -117,6 +97,11 @@ eleminarRepetidos (x:xs) | estaRepetidoPrimero (x:xs) = eleminarRepetidos xs
 
 contarCirculosPrimos :: Integer -> Integer
 contarCirculosPrimos n = longitud (listaCirculosPrimos n)
+
+--Longitud de una lista
+longitud :: [a] -> Integer
+longitud [] = 0
+longitud (_:xs) = 1 + longitud xs
 
 --Ejericio optativo------------------------------------------------------------------------
 
